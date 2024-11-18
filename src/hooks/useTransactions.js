@@ -7,24 +7,34 @@ const useTransactions = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await loadTransactions();
-      setTransactions(data);
+      setTransactions(data || []); // Подстраховка, если нет данных
     };
     fetchData();
   }, []);
 
-  const addTransaction = (transaction) => {
-    const newTransactions = [transaction, ...transactions];
+  const saveAndSetTransactions = (newTransactions) => {
     setTransactions(newTransactions);
     saveTransactions(newTransactions);
+  };
+
+  const addTransaction = (transaction) => {
+    const newTransactions = [transaction, ...transactions];
+    saveAndSetTransactions(newTransactions);
+  };
+
+  const updateTransaction = (updatedTransaction) => {
+    const newTransactions = transactions.map((t) =>
+      t.id === updatedTransaction.id ? updatedTransaction : t
+    );
+    saveAndSetTransactions(newTransactions);
   };
 
   const deleteTransaction = (id) => {
     const newTransactions = transactions.filter((t) => t.id !== id);
-    setTransactions(newTransactions);
-    saveTransactions(newTransactions);
+    saveAndSetTransactions(newTransactions);
   };
 
-  return { transactions, addTransaction, deleteTransaction };
+  return { transactions, addTransaction, updateTransaction, deleteTransaction };
 };
 
 export default useTransactions;

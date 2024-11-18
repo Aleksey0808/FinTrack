@@ -1,26 +1,48 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import styled from 'styled-components/native';
-import useTransactions from '../hooks/useTransactions';
+import styled, { useTheme } from 'styled-components/native';
+import { LinearGradient } from 'expo-linear-gradient'; // Импортируем LinearGradient
+import { useTransactions } from '../hooks/TransactionsContext';
 
 const categories = ['Food', 'Transport', 'Entertainment', 'Shopping', 'Other'];
 
-const AddTransactionScreen = ({ navigation }) => {
-  const { addTransaction } = useTransactions();
+const AddTransactionScreen = ({ navigation, route }) => {
+  const { addTransaction, updateTransaction } = useTransactions();
+  const transaction = route.params?.transaction || null;
 
-  const PickerContainer = styled.View`
-  background-color: ${({ theme }) => theme.card};
-  border-radius: 8px;
-  margin-bottom: 15px;
-  overflow: visible; 
-`;
+  const [amount, setAmount] = useState(transaction?.amount.toString() || '');
+  const [type, setType] = useState(transaction?.type || 'Expense');
+  const [category, setCategory] = useState(transaction?.category || categories[0]);
+  const [date, setDate] = useState(transaction?.date || new Date().toISOString().split('T')[0]);
+  const [note, setNote] = useState(transaction?.note || '');
+  const [customCategory, setCustomCategory] = useState('');
+  const theme = useTheme();
 
-  const [amount, setAmount] = useState('');
-  const [type, setType] = useState('Expense');
-  const [category, setCategory] = useState(categories[0]);
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [note, setNote] = useState('');
+  const handleSaveTransaction = () => {
+    if (!amount || isNaN(amount)) {
+      Alert.alert('Invalid Input', 'Please enter a valid amount.');
+      return;
+    }
+  
+    const newTransaction = {
+      id: transaction ? transaction.id : Date.now().toString(),
+      amount: parseFloat(amount),
+      type,
+      category: customCategory || category,
+      date,
+      note,
+    };
+  
+    if (transaction) {
+      updateTransaction(newTransaction);
+    } else {
+      addTransaction(newTransaction);
+    }
+  
+    navigation.goBack();
+  };
+  
 
   const handleAddTransaction = () => {
     if (!amount || isNaN(amount)) {
@@ -32,7 +54,7 @@ const AddTransactionScreen = ({ navigation }) => {
       id: Date.now().toString(),
       amount: parseFloat(amount),
       type,
-      category,
+      category: customCategory || category, 
       date,
       note,
     };
@@ -42,7 +64,9 @@ const AddTransactionScreen = ({ navigation }) => {
   };
 
   return (
-    <Container>
+    <GradientContainer
+      colors={theme.gradientColors} // Используем градиентные цвета из темы
+    >
       <Title>Add Transaction</Title>
 
       <Label>Amount</Label>
@@ -51,6 +75,7 @@ const AddTransactionScreen = ({ navigation }) => {
         value={amount}
         onChangeText={setAmount}
         placeholder="Enter amount"
+        placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
       />
 
       <Label>Type</Label>
@@ -73,19 +98,45 @@ const AddTransactionScreen = ({ navigation }) => {
       <PickerContainer>
         <Picker
           selectedValue={category}
-          onValueChange={(itemValue) => setCategory(itemValue)}
+          onValueChange={(itemValue) => {
+            setCategory(itemValue);
+            if (itemValue !== 'Other') {
+              setCustomCategory('');
+            }
+          }}
+          style={{
+            color: theme.text, // Цвет текста в Picker
+          }}
         >
           {categories.map((cat) => (
-            <Picker.Item key={cat} label={cat} value={cat} />
+            <Picker.Item 
+              key={cat} 
+              label={cat} 
+              value={cat} 
+              color={theme.text} // Устанавливаем цвет для каждого элемента
+            />
           ))}
         </Picker>
       </PickerContainer>
+
+      {category === 'Other' && (
+        <>
+          <Label>Custom Category</Label>
+          <Input
+            value={customCategory}
+            onChangeText={setCustomCategory}
+            placeholder="Enter custom category"
+            placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
+          />
+        </>
+      )}
 
       <Label>Date</Label>
       <Input
         value={date}
         onChangeText={setDate}
         placeholder="YYYY-MM-DD"
+        placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
       />
 
       <Label>Note</Label>
@@ -93,19 +144,23 @@ const AddTransactionScreen = ({ navigation }) => {
         value={note}
         onChangeText={setNote}
         placeholder="Optional note"
+        placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
       />
 
-      <AddButton onPress={handleAddTransaction}>
-        <AddButtonText>Add Transaction</AddButtonText>
+      <AddButton onPress={handleSaveTransaction}>
+        <AddButtonText>{transaction ? 'Update Transaction' : 'Add Transaction'}</AddButtonText>
       </AddButton>
-    </Container>
+
+    </GradientContainer>
   );
 };
 
-const Container = styled.ScrollView`
+const GradientContainer = styled(LinearGradient)`
   flex: 1;
   padding: 20px;
-  background-color: ${({ theme }) => theme.background};
+  justify-content: flex-start;
+  border-radius: 10px;
+  background-color: ${({ theme }) => theme.background}; /* Фон должен быть из темы */
 `;
 
 const Title = styled.Text`
@@ -146,7 +201,7 @@ const TypeButton = styled.TouchableOpacity`
 
 const TypeButtonText = styled.Text`
   color: ${({ selected, theme }) =>
-  selected ? theme.text : theme.accent};
+    selected ? theme.text : theme.accent};
   font-size: 16px;
 `;
 
@@ -170,12 +225,5 @@ const AddButtonText = styled.Text`
   color: white;
   font-size: 18px;
 `;
-
-const styles = StyleSheet.create({
-  picker: {
-    height: 50,
-    color: '#000',
-  },
-});
 
 export default AddTransactionScreen;

@@ -3,9 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { lightTheme, darkTheme } from './src/styles/theme';
+import WelcomeScreen from './src/screens/WelcomeScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import AddTransactionScreen from './src/screens/AddTransactionScreen';
 import StatsScreen from './src/screens/StatsScreen';
+import { TransactionsProvider } from './src/hooks/TransactionsContext';
 
 const Stack = createStackNavigator();
 
@@ -16,9 +18,11 @@ export default function App() {
 
   return (
     <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+      <TransactionsProvider>
       <AppContainer>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
             <Stack.Screen name="Home">
               {(props) => <HomeScreen {...props} toggleTheme={toggleTheme} />}
             </Stack.Screen>
@@ -27,6 +31,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </AppContainer>
+      </TransactionsProvider>
     </ThemeProvider>
   );
 }
