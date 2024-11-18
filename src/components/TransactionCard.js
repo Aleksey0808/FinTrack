@@ -1,80 +1,103 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
+import Delete from '../../assets/icons/Delete';
+import Edit from '../../assets/icons/Edit';
 
 const TransactionCard = ({ transaction, onDelete, onEdit }) => {
-  const theme = useTheme();  
+  const theme = useTheme();
 
   return (
-    <Card style={{ backgroundColor: theme.card }}>
-      <View>
-        <CategoryText style={{ color: theme.text }}>
-          {transaction.category}
-        </CategoryText>
-        <DateText style={{ color: theme.text }}>
-          {transaction.date}
-        </DateText>
-      </View>
-      <View>
+    <Card>
+      <Content>
+        <TextContainer>
+          <CategoryText>{transaction.category}</CategoryText>
+          <DateText>{transaction.date}</DateText>
+        </TextContainer>
         <AmountText
-          style={[
-            { color: theme.text }, 
-            transaction.type === 'Income' ? styles.income : styles.expense,
-          ]}
+          style={transaction.type === 'Income' ? styles.income : styles.expense}
         >
           ${transaction.amount}
         </AmountText>
-        <TouchableOpacity onPress={onEdit}>
-          <EditText style={{ color: theme.text }}>Edit</EditText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onDelete}>
-          <DeleteText style={{ color: theme.text }}>
-            Delete
-          </DeleteText>
-        </TouchableOpacity>
-      </View>
+      </Content>
+      <ActionsContainer>
+        <IconButton onPress={onDelete}>
+          <DeleteIcon />
+        </IconButton>
+        <IconButton onPress={onEdit}>
+          <EditIcon />
+        </IconButton>
+      </ActionsContainer>
     </Card>
   );
 };
 
 const Card = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+  background-color: ${({ theme }) => theme.card};
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 10px;
 `;
 
+const Content = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const TextContainer = styled.View`
+  flex: 1;
+`;
+
 const CategoryText = styled.Text`
   font-size: 16px;
   font-weight: bold;
+  color: ${({ theme }) => theme.text};
 `;
 
 const DateText = styled.Text`
   font-size: 14px;
-  color: #666;
+  color: ${({ theme }) => theme.textSecondary};
+  margin-top: 4px;
 `;
 
 const AmountText = styled.Text`
   font-size: 18px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.text};
 `;
 
-const DeleteText = styled.Text`
-  color: red;
-  margin-top: 5px;
-  font-size: 14px;
+const ActionsContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+`;
+
+const IconButton = styled.TouchableOpacity`
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.iconBackground};
+  border-radius: 20px;
+`;
+
+const DeleteIcon = styled(Delete)`
+  width: 24px;
+  height: 24px;
+  color: ${({ theme }) => theme.danger};
+`;
+
+const EditIcon = styled(Edit)`
+  width: 24px;
+  height: 24px;
+  color: ${({ theme }) => theme.accent};
 `;
 
 const styles = {
   income: { color: 'green' },
   expense: { color: 'red' },
 };
-
-const EditText = styled.Text`
-  color: blue;
-  margin-top: 5px;
-  font-size: 14px;
-`;
-
 
 export default TransactionCard;

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styled, { useTheme } from 'styled-components/native';
-import { LinearGradient } from 'expo-linear-gradient'; // Импортируем LinearGradient
+import { LinearGradient } from 'expo-linear-gradient'; 
 import { useTransactions } from '../hooks/TransactionsContext';
+import Back from '../../assets/icons/Back';
 
 const categories = ['Food', 'Transport', 'Entertainment', 'Shopping', 'Other'];
 
@@ -65,8 +66,11 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
   return (
     <GradientContainer
-      colors={theme.gradientColors} // Используем градиентные цвета из темы
+      colors={theme.gradientColors} 
     >
+      <BackButton onPress={() => navigation.goBack()}>
+        <Back width={30} height={30} />
+      </BackButton>
       <Title>Add Transaction</Title>
 
       <Label>Amount</Label>
@@ -75,7 +79,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         value={amount}
         onChangeText={setAmount}
         placeholder="Enter amount"
-        placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
+        placeholderTextColor={theme.placeholderText} 
       />
 
       <Label>Type</Label>
@@ -105,7 +109,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
             }
           }}
           style={{
-            color: theme.text, // Цвет текста в Picker
+            color: theme.text, 
           }}
         >
           {categories.map((cat) => (
@@ -113,7 +117,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
               key={cat} 
               label={cat} 
               value={cat} 
-              color={theme.text} // Устанавливаем цвет для каждого элемента
+              color={theme.text}
             />
           ))}
         </Picker>
@@ -126,7 +130,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
             value={customCategory}
             onChangeText={setCustomCategory}
             placeholder="Enter custom category"
-            placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
+            placeholderTextColor={theme.placeholderText}
           />
         </>
       )}
@@ -136,7 +140,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         value={date}
         onChangeText={setDate}
         placeholder="YYYY-MM-DD"
-        placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
+        placeholderTextColor={theme.placeholderText} 
       />
 
       <Label>Note</Label>
@@ -144,7 +148,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         value={note}
         onChangeText={setNote}
         placeholder="Optional note"
-        placeholderTextColor={theme.placeholderText} // Устанавливаем цвет плейсхолдера
+        placeholderTextColor={theme.placeholderText} 
       />
 
       <AddButton onPress={handleSaveTransaction}>
@@ -160,14 +164,14 @@ const GradientContainer = styled(LinearGradient)`
   padding: 20px;
   justify-content: flex-start;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.background}; /* Фон должен быть из темы */
+  background-color: ${({ theme }) => theme.background}; 
 `;
 
 const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
   color: ${({ theme }) => theme.text};
-  margin-top: 40px;
+  margin-top: 80px;
   margin-bottom: 20px;
 `;
 
@@ -180,10 +184,10 @@ const Label = styled.Text`
 
 const Input = styled.TextInput`
   background-color: ${({ theme }) => theme.card};
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
   color: ${({ theme }) => theme.text};
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
 
 const TypeSwitcher = styled.View`
@@ -201,7 +205,7 @@ const TypeButton = styled.TouchableOpacity`
 
 const TypeButtonText = styled.Text`
   color: ${({ selected, theme }) =>
-    selected ? theme.text : theme.accent};
+  selected ? theme.text : theme.accent};
   font-size: 16px;
 `;
 
@@ -224,6 +228,22 @@ const AddButton = styled.TouchableOpacity`
 const AddButtonText = styled.Text`
   color: white;
   font-size: 18px;
+`;
+
+const BackButton = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 15px;
+  top: 40px;  
+  border-radius: 25px;
+  padding: 5px;
+  height: 45px;
+  width: 45px;
+  z-index: 9999;  
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default AddTransactionScreen;
