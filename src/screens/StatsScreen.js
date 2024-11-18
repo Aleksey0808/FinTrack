@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { VictoryPie } from 'victory-native';
-import useTransactions from '../hooks/useTransactions';
+import { useTransactions } from '../hooks/TransactionsContext';
 
 const StatsScreen = () => {
   const { transactions } = useTransactions();

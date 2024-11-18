@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import useTransactions from '../hooks/useTransactions';
+import { useTransactions } from '../hooks/TransactionsContext';
 
 const WelcomeScreen = ({ navigation, toggleTheme }) => {
   const { transactions } = useTransactions();

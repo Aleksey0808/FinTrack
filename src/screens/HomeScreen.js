@@ -4,29 +4,42 @@ import styled, { useTheme } from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import TransactionCard from '../components/TransactionCard';
 import { useTransactions } from '../hooks/TransactionsContext';
-// import Back from '../../assets/icons/Back';
+import Back from '../../assets/icons/Back';
+import Moon from '../../assets/icons/Moon';
+import MoonDark from '../../assets/icons/MoonDark';
 
 const HomeScreen = ({ navigation, toggleTheme, route }) => {
   const { pay } = route.params;
   const { transactions, deleteTransaction } = useTransactions();
   const theme = useTheme();
 
-  const totalBalance = transactions.reduce(
-    (acc, t) => (t.type === 'Income' ? acc + t.amount : acc - t.amount),
+  const selectTransactions = transactions.filter((item) => item.type === pay);
+
+  const totalBalance = selectTransactions.reduce(
+    (acc, t) => (pay === 'Income' ? acc + t.amount : pay === 'Expense' ? acc - t.amount : acc),
     0
   );
-
-  const selectTransactions = transactions.filter((item) => item.type === pay);
+  
 
   return (
     <GradientContainer colors={theme.gradientColors}>
+      <BackButton onPress={() => navigation.goBack()}>
+        <Back width={30} height={30} />
+      </BackButton>
       <Header>
-      {/* <BackButton onPress={() => navigation.goBack()}>
-          <Back /> 
-        </BackButton> */}
-        <Title>Balance: ${totalBalance.toFixed(2)}</Title>
+      <Title>
+        {pay === 'Income' 
+          ? `Income: $${totalBalance.toFixed(2)}` 
+          : pay === 'Expense' 
+          ? `Expense: $${totalBalance.toFixed(2)}` 
+          : `Balance: $${totalBalance.toFixed(2)}`}
+      </Title>
         <TouchableOpacity onPress={toggleTheme}>
-          <ThemeToggle>Switch Theme</ThemeToggle>
+          {theme.mode === 'light' ? (
+            <MoonDark width={30} height={30} />
+          ) : (
+            <Moon width={30} height={30} />
+          )}
         </TouchableOpacity>
       </Header>
       <FlatList
@@ -59,7 +72,7 @@ const GradientContainer = styled(LinearGradient)`
 const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 40px;
+  margin-top: 80px;
   margin-bottom: 20px;
 `;
 
@@ -67,11 +80,6 @@ const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
   color: ${({ theme }) => theme.text};
-`;
-
-const ThemeToggle = styled.Text`
-  font-size: 16px;
-  color: ${({ theme }) => theme.accent};
 `;
 
 const AddButton = styled.TouchableOpacity`
@@ -87,17 +95,20 @@ const AddButtonText = styled.Text`
   font-size: 18px;
 `;
 
-// const BackButton = styled.TouchableOpacity`
-//   align-items: center;
-//   justify-content: center;
-//   position: absolute;
-//   left: 15;
-//   background-color: '#FFFFFF1A';
-//   border-radius: 25;
-//   padding: 5;
-//   height: 45;
-//   width: 45;
-//   z-index: 50;
-// `;
+const BackButton = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 15px;
+  top: 40px;  
+  border-radius: 25px;
+  padding: 5px;
+  height: 45px;
+  width: 45px;
+  z-index: 9999;  
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default HomeScreen;
