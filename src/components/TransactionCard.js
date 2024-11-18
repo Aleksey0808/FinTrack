@@ -1,43 +1,80 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import styled, { useTheme } from 'styled-components/native';
 
-const TransactionCard = ({ transaction, onDelete }) => (
-  <View style={styles.card}>
-    <View>
-      <Text style={styles.category}>{transaction.category}</Text>
-      <Text style={styles.date}>{transaction.date}</Text>
-    </View>
-    <View>
-      <Text
-        style={[
-          styles.amount,
-          transaction.type === 'Income' ? styles.income : styles.expense,
-        ]}
-      >
-        ${transaction.amount}
-      </Text>
-      <TouchableOpacity onPress={onDelete}>
-        <Text style={styles.delete}>Delete</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+const TransactionCard = ({ transaction, onDelete, onEdit }) => {
+  const theme = useTheme();  
 
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  category: { fontSize: 16, fontWeight: 'bold' },
-  date: { fontSize: 14, color: '#666' },
-  amount: { fontSize: 18 },
+  return (
+    <Card style={{ backgroundColor: theme.card }}>
+      <View>
+        <CategoryText style={{ color: theme.text }}>
+          {transaction.category}
+        </CategoryText>
+        <DateText style={{ color: theme.text }}>
+          {transaction.date}
+        </DateText>
+      </View>
+      <View>
+        <AmountText
+          style={[
+            { color: theme.text }, 
+            transaction.type === 'Income' ? styles.income : styles.expense,
+          ]}
+        >
+          ${transaction.amount}
+        </AmountText>
+        <TouchableOpacity onPress={onEdit}>
+          <EditText style={{ color: theme.text }}>Edit</EditText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onDelete}>
+          <DeleteText style={{ color: theme.text }}>
+            Delete
+          </DeleteText>
+        </TouchableOpacity>
+      </View>
+    </Card>
+  );
+};
+
+const Card = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+`;
+
+const CategoryText = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+const DateText = styled.Text`
+  font-size: 14px;
+  color: #666;
+`;
+
+const AmountText = styled.Text`
+  font-size: 18px;
+`;
+
+const DeleteText = styled.Text`
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
+`;
+
+const styles = {
   income: { color: 'green' },
   expense: { color: 'red' },
-  delete: { color: 'red', marginTop: 5, fontSize: 14 },
-});
+};
+
+const EditText = styled.Text`
+  color: blue;
+  margin-top: 5px;
+  font-size: 14px;
+`;
+
 
 export default TransactionCard;
