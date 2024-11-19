@@ -24,9 +24,10 @@ DerivedData
 /ios/Pods/
 /.android/
 /ios/
-/expo/
+/.expo/
 /.git/
 /package-lock.json
+
 
 *.ttf
 *.jar
