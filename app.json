@@ -3,19 +3,43 @@
     "name": "FinTrack",
     "slug": "FinTrack",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "fintrack",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSAdvertisingAttributionReportEndpoint": "https://appsflyer-skadnetwork.com/",
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "eqhxz8m8av.skadnetwork"
+          }
+        ]
+      },
+      "bundleIdentifier": "com.fintrackjor",
+      "associatedDomains": [
+        "applinks:fintracker.onelink.me"
+      ]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -25,6 +49,27 @@
     "plugins": [
       "expo-router",
       [
+        "react-native-appsflyer",
+        {
+          "shouldUseStrictMode": false
+        }
+      ],
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "production"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static",
+            "deploymentTarget": "15.1"
+          }
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
@@ -32,8 +77,30 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
       ]
     ],
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "updates": {
+        "enabled": true,
+        "fallbackToCacheTimeout": 0
+      },
+      "requestHeaders": {
+        "expo-channel-name": "fintrack"
+      },
+      "url": "https://u.expo.dev/dc2fcaa3-12ea-4990-af00-5f4bd819ba20"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dc2fcaa3-12ea-4990-af00-5f4bd819ba20"
+      }
+    },
     "experiments": {
       "typedRoutes": true
     }
