@@ -5,7 +5,7 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
-      app_store_connect: PlinkJump
+      app_store_connect: FinTrack
     environment:
       ios_signing:
         distribution_type: app_store
@@ -15,8 +15,8 @@ workflows:
         APP_STORE_CONNECT_API_PRIVATE_KEY: "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgkvH9wVIAjlDWKlpFWUdos3NUl4Rf7fdiG0TECrobvf+gCgYIKoZIzj0DAQehRANCAAR96oXMhb26lxfBORiFota2YYrubr711CQfDqdHeA9luVvehx1m2NDBhDkvEqgtV9I1pnXgkcLKN+VcWB2EcZbd"
         APP_STORE_CONNECT_API_KEY_ID: "6VS487U5WM"
         BUNDLE_ID: "com.uidv.tap"
-        XCODE_WORKSPACE: "PlinkJump.xcworkspace"
-        XCODE_SCHEME: "PlinkJump"
+        XCODE_WORKSPACE: "FinTrack.xcworkspace"
+        XCODE_SCHEME: "FinTrack"
       xcode: latest
       cocoapods: default
     scripts:
@@ -29,10 +29,10 @@ workflows:
       - name: Copy entitlements files
         script: |
           echo "Copying entitlements files..."
-          cp PlinkJump.entitlements ios/PlinkJump/PlinkJump.entitlements
+          cp FinTrack.entitlements ios/FinTrack/FinTrack.entitlements
           cp OneSignalNotificationServiceExtension.entitlements ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
           echo "Copied entitlements files:"
-          ls -l ios/PlinkJump/PlinkJump.entitlements
+          ls -l ios/FinTrack/FinTrack.entitlements
           ls -l ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
       - name: Set Info.plist values
         script: |
@@ -83,7 +83,7 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       android_signing:
-        - PlinkJump
+        - FinTrack
       groups:
         - google_play
       vars:

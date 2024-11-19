@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Track Task Flow",
-    "slug": "Track Task Flow",
+    "name": "FinTrack",
+    "slug": "FinTrack",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
