@@ -4,18 +4,19 @@
     "slug": "FinTrack",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/icon_fin_track-2.png",
+    "scheme": "finTrack",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon_fin_track-2.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.aleksey0808.FinTrack"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "dc2fcaa3-12ea-4990-af00-5f4bd819ba20"
+      }
     }
   }
 }
