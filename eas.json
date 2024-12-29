@@ -9,11 +9,16 @@
       "distribution": "internal"
     },
     "preview": {
+      "env": {
+        "ANDROID_HOME": "/Users/admin/Library/Android/sdk",
+        "ANDROID_SDK_ROOT": "/Users/admin/Library/Android/sdk"
+      },
       "distribution": "internal"
     },
     "production": {
       "env": {
-        "ANDROID_SDK_ROOT": "/Users/admin/Library/Android/sdk"
+        "ANDROID_SDK_ROOT": "/Users/admin/Library/Android/sdk",
+        "ANDROID_HOME": "/Users/admin/Library/Android/sdk"
     },
       "autoIncrement": true
     }

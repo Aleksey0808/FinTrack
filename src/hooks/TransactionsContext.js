@@ -8,12 +8,22 @@ export const TransactionsProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await loadTransactions();
-      setTransactions(data || []);
+      try {
+        const data = await loadTransactions();
+        if (!data || data.length === 0) {
+          console.warn('No transactions found. Initializing with an empty array.');
+          setTransactions([]); 
+        } else {
+          setTransactions(data); 
+        }
+      } catch (error) {
+        console.error('Error loading transactions:', error);
+        setTransactions([]); 
+      }
     };
+
     fetchData();
   }, []);
-
   const addTransaction = (transaction) => {
     const newTransactions = [transaction, ...transactions];
     setTransactions(newTransactions);

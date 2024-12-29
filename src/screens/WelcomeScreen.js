@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTransactions } from '../hooks/TransactionsContext';
+import * as SplashScreen from 'expo-splash-screen';
 
 const WelcomeScreen = ({ navigation, toggleTheme }) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        const data = await loadTransactions();
+        setTransactions(data || []);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
+    };
+    fetchData();
+  }, []);
+
   const { transactions } = useTransactions();
-  const totalBalance = transactions.reduce(
-    (acc, t) => (t.type === 'Income' ? acc + t.amount : acc - t.amount),
-    0
-  );
+
+  const totalBalance = useMemo(() => {
+    return transactions.reduce(
+      (acc, t) => (t.type === 'Income' ? acc + t.amount : acc - t.amount),
+      0
+    );
+  }, [transactions]);
+
 
   return (
     <GradientContainer colors={['#4e3e8c', '#b08fcf']}>
